@@ -34,7 +34,7 @@ build:
         - make
         - make install
         - cd ..
-        - /opt/python/cp35-cp35m/bin/pip install -U pdoc3 gdown
+        - /opt/python/cp35-cp35m/bin/pip install -U pdoc3 gdown matplotlib==3.0.3
         
         
     # compile libcolgraph and copy status (build.svg) to public/
