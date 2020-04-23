@@ -48,19 +48,16 @@ build:
         - auditwheel repair dist/*.whl -w dist
         - /opt/python/cp35-cp35m/bin/python -m twine upload dist/*.tar.gz  --verbose
         - /opt/python/cp35-cp35m/bin/python -m twine upload dist/*manylinux*.whl --verbose
-        #- if /opt/python/cp35-cp35m/bin/python -m twine upload dist/*.tar.gz  --verbose && /opt/python/cp35-cp35m/bin/python -m twine upload dist/*manylinux*.whl --verbose; then echo "PASSED JOB" && /opt/python/cp35-cp35m/bin/python -m anybadge --label=pipeline --value=passing --file=build.svg passing=green failing=red; else echo "FAILED JOB" && /opt/python/cp35-cp35m/bin/python -m anybadge --label=pipeline --value=failing --file=build.svg passing=green  failing=red; fi
-        #- mkdir -p public; mv build.svg public/build.svg
         
     after_script:
         - alias python3=/opt/python/cp35-cp35m/bin/python
         - PATH=/opt/python/cp35-cp35m/bin/:$PATH; export PATH
         - mkdir -p public/static
         - cp libcolgraph/web/static/favicon.ico public/static
-        - make
-        #- cat requirements.txt | xargs -n 1 /opt/python/cp35-cp35m/bin/pip install
-        #- /opt/python/cp35-cp35m/bin/python -m libcolgraph.web -p 5000 &
-        #- wget -r -np -k http://localhost:5000
-        #- mv localhost*/* public/demo/
+        - cd public
+        - wget https://srv-file9.gofile.io/download/VlmdUC/demo.tar.gz #TODO
+        - tar xzvf demo.tar.gz
+        - rm demo.tar.gz
         
     artifacts:
         paths:

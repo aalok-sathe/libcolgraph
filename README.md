@@ -1,5 +1,5 @@
 ## libcolgraph
-[![pipeline status](https://aalok-sathe.gitlab.io/libcolgraph/build.svg?v=1780894274)](https://gitlab.com/aalok-sathe/libcolgraph)
+[![pipeline status](https://aalok-sathe.gitlab.io/libcolgraph/build.svg?v=960959598)](https://gitlab.com/aalok-sathe/libcolgraph)
 
 a coloring graphs library written in C++ for speedy computation and wrapped in
 Python for ease of development and extension!
@@ -124,6 +124,8 @@ visit [full API documentation](https://aalok-sathe.gitlab.io/libcolgraph)
 
 Coloring Graphs lab, University of Richmond.
 (C) 2017-2020
+
+
 
 
 
