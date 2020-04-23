@@ -46,6 +46,7 @@ build:
         - rm -rf doxy2swig
         - mv doxy2swig.py doxy2swig
         - chmod +x doxy2swig
+        - PATH=$PATH:$PWD; export PATH
         - make docs
         - /opt/python/cp35-cp35m/bin/python setup.py sdist bdist_wheel
         - auditwheel repair dist/*.whl -w dist

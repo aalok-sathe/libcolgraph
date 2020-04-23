@@ -64,7 +64,7 @@ trigger:
 
 docs: Doxyfile $(MODULE)/swigsrc/docs.i $(wildcard $(MODULE)/**/%.py) $(TARGET) README.md
 	doxygen Doxyfile
-	doxy2swig docs/xml/index.xml libcolgraph/swigsrc/docs.i -catfo
+	doxy2swig* docs/xml/index.xml libcolgraph/swigsrc/docs.i -catfo
 	pdoc -o docs --html --force libcolgraph
 	mkdir -p public/
 	cp -r docs/libcolgraph public/
