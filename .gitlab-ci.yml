@@ -50,7 +50,11 @@ build:
     after_script:
         - mkdir -p public/static
         - cp libcolgraph/web/static/favicon.ico public/static
-        - /opt/python/cp35-cp35m/bin/python setup.py install
+        - make
+        - cat requirements.txt | xargs -n 1 /opt/python/cp35-cp35m/bin/pip install
+        - /opt/python/cp35-cp35m/bin/python -m libcolgraph.web -p 5000 &
+        - wget -r -np -k http://localhost:5000
+        - mv localhost*/* public/demo/
         
     artifacts:
         paths:
