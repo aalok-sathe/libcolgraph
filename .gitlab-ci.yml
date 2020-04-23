@@ -36,7 +36,7 @@ build:
         - cd ..
         - git clone https://github.com/m7thon/doxy2swig
         - mv doxy2swig/doxy2swig.py .
-        - /opt/python/cp35-cp35m/bin/pip install -U pdoc3
+        - /opt/python/cp35-cp35m/bin/pip install -U pdoc3 gdown
         
         
     # compile libcolgraph and copy status (build.svg) to public/
@@ -55,9 +55,10 @@ build:
         - mkdir -p public/static
         - cp libcolgraph/web/static/favicon.ico public/static
         - cd public
-        - wget https://srv-file9.gofile.io/download/VlmdUC/demo.tar.gz #TODO
+        - gdown --id 1hS59BEj-FrsZvgbUKsMHEKZ7Y3rSkRu0
         - tar xzvf demo.tar.gz
         - rm demo.tar.gz
+        - cd ..
         
     artifacts:
         paths:
