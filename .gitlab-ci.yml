@@ -14,6 +14,8 @@ build:
     
     # install SWIG
     before_script:
+        - alias python3=/opt/python/cp35-cp35m/bin/python
+        - PATH=/opt/python/cp35-cp35m/bin/:$PATH; export PATH
         - yum -y -q update
         - yum install -y -q https://dl.fedoraproject.org/pub/epel/epel-release-latest-7.noarch.rpm
         - yum -y -q groupinstall "Development Tools"
@@ -39,6 +41,8 @@ build:
         
     # compile libcolgraph and copy status (build.svg) to public/
     script:
+        - alias python3=/opt/python/cp35-cp35m/bin/python
+        - PATH=/opt/python/cp35-cp35m/bin/:$PATH; export PATH
         - make docs
         - /opt/python/cp35-cp35m/bin/python setup.py sdist bdist_wheel
         - auditwheel repair dist/*.whl -w dist
@@ -48,6 +52,8 @@ build:
         #- mkdir -p public; mv build.svg public/build.svg
         
     after_script:
+        - alias python3=/opt/python/cp35-cp35m/bin/python
+        - PATH=/opt/python/cp35-cp35m/bin/:$PATH; export PATH
         - mkdir -p public/static
         - cp libcolgraph/web/static/favicon.ico public/static
         - make
