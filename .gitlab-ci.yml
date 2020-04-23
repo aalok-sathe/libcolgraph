@@ -42,7 +42,8 @@ build:
         - mkdir -p public; mv build.svg public/build.svg
         
     after_script:
-        - cp colgraphweb/static/favicon.ico public/static
+        - mkdir -p public/static
+        - cp libcolgraph/web/static/favicon.ico public/static
         
     artifacts:
         paths:
