@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+
+<html lang="en">
+
+  <head>
+    <meta http-equiv="content-type" content="text/html; charset=UTF-8">
+    <meta name="description" content="">
+    <meta name="author" content="(C) 2019-20 Coloring Graphs lab">
+    <title>libcolgraph web</title>
+    <link rel="shortcut icon" href="{{ url_for('static', filename='favicon.ico') }}">
+    <!-- template loads -->
+
+    <!-- CDN imports -->
+    
+    <!--script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/vis/4.16.1/vis-network.min.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/vis/4.16.1/vis.css" type="text/css"/>
+    <!--script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.0/jquery.min.js"></script-->
+    <!--link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
+    <link rel="stylesheet" href="https://code.getmdl.io/1.3.0/material.indigo-pink.min.css">
+    <script defer src="https://code.getmdl.io/1.3.0/material.min.js"></script-->
+
+    <link rel="stylesheet" href={{ url_for('static', filename='viewtemplate.css') }}>
+    
+    
+    {% for filename in ['vis-network.min.js', 'jquery.min.js'] %}
+        <script type="text/javascript" src={{ url_for('static', filename='src/'+filename) }}>
+        </script>
+    {% endfor %}
+    {% for filename in ['vis.css'] %}
+        <link rel="stylesheet" type="text/css" href={{ url_for('static', filename='src/'+filename) }}/>
+    {% endfor %}
+    
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/vis/4.16.1/vis.css" type="text/css"/>
+    
+  </head>
+
+  <body style="width: 100%; height: 100%;">
+    {% include "grid.html" %}
+  </body>
+ 
+ <script src={{ url_for('static', filename='colgraphweb.js') }}></script>
+
+</html>

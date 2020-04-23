@@ -1,0 +1,11 @@
+# libcolgraph c++ codebase Doxyfile
+
+GENERATE_XML    = YES
+GENERATE_HTML   = NO 
+GENERATE_LATEX  = NO
+
+INPUT           = ./libcolgraph/
+FILE_PATTERNS   = *.cpp *.h
+OUTPUT_DIRECTORY= ./docs
+
+EXCLUDE_PATTERNS= *wrap.cpp *test*

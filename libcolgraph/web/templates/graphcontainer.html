@@ -1,0 +1,43 @@
+<script type="text/javascript">
+  var {{ container_type }}nodes;
+  var {{ container_type }}edges;
+  //var {{ container_type }}options;
+  // "{{ container_type }}"
+  {% if container_type == "bg" %}
+    {{ container_type }}nodes = {{ bgnodes|safe }};
+    {{ container_type }}edges = {{ bgedges|safe }};
+    //{{ container_type }}options = {{ bgoptions|safe }};
+  {% elif container_type == "cg" %}
+    {{ container_type }}nodes = {{ cgnodes|safe }};
+    {{ container_type }}edges = {{ cgedges|safe }};
+    //{{ container_type }}options = {{ cgoptions|safe }};
+  {% elif container_type == "mcg" %}
+    {{ container_type }}nodes = {{ mcgnodes|safe }};
+    {{ container_type }}edges = {{ mcgedges|safe }};
+    //{{ container_type }}options = {{ mcgoptions|safe }};
+  {% elif container_type == "pcg" %}
+    {{ container_type }}nodes = {{ pcgnodes|safe }};
+    {{ container_type }}edges = {{ pcgedges|safe }};
+    //{{ container_type }}options = {{ mcgoptions|safe }};
+  {% endif %}
+
+</script>
+
+<div id="{{ container_type }}container">
+    <div class="vis-network" style="position: relative; overflow: hidden; touch-action: pan-y; -moz-user-select: none; width: 100%; height: 100%;" tabindex="900"></div>
+    <canvas style="position: relative; touch-action: none; -moz-user-select: none; width: 100%; height: 100%;" width="600" height="400"></canvas>
+
+    {% if container_type == "cg" %}
+    <div id="loadingBar" class="loadingBar">
+        <div class="outerBorder">
+            <div id="text">0%</div>
+            <div id="border">
+                <div id="bar" class="bar"></div>
+            </div>
+        </div>
+    </div>
+    {% endif %}
+
+    {# include "topbar.html" #}
+
+</div>

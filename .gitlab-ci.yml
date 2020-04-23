@@ -1,0 +1,80 @@
+variables:
+    TWINE_USERNAME: SECURE
+    TWINE_PASSWORD: SECURE
+    TWINE_REPOSITORY_URL: https://upload.pypi.org/legacy/
+    PYBIN: /opt/python/cp35-cp35m/bin
+
+stages:
+    - deploy
+    - status
+
+build:
+    image: "quay.io/pypa/manylinux2010_x86_64"
+    stage: deploy
+    
+    # install SWIG
+    before_script:
+        - yum -y -q update
+        - yum install -y -q https://dl.fedoraproject.org/pub/epel/epel-release-latest-7.noarch.rpm
+        - yum -y -q groupinstall "Development Tools"
+        - yum -y -q --enablerepo=extras install epel-release
+        - yum install -y -q bison flex git centos-release-scl
+        - yum install -y -q wget curl
+        - yum install -y -q automake autoconf pcre-devel
+        - yum -y -q update
+        - /opt/python/cp35-cp35m/bin/pip install -U setuptools wheel twine auditwheel
+        - /opt/python/cp35-cp35m/bin/pip install -U anybadge
+        - git clone https://github.com/swig/swig.git
+        - cd swig
+        - git checkout rel-4.0.0
+        - ./autogen.sh
+        - ./configure
+        - make
+        - make install
+        - cd ..
+        
+    # compile libcolgraph and copy status (build.svg) to public/
+    script:
+        - /opt/python/cp35-cp35m/bin/python setup.py sdist bdist_wheel
+        - make docs
+        - auditwheel repair dist/*.whl -w dist
+        - if /opt/python/cp35-cp35m/bin/python -m twine upload dist/*.tar.gz  --verbose && /opt/python/cp35-cp35m/bin/python -m twine upload dist/*manylinux*.whl --verbose; then echo "PASSED JOB" && /opt/python/cp35-cp35m/bin/python -m anybadge --label=pipeline --value=passing --file=build.svg passing=green failing=red; else echo "FAILED JOB" && /opt/python/cp35-cp35m/bin/python -m anybadge --label=pipeline --value=failing --file=build.svg passing=green  failing=red; fi
+        - mkdir -p public; mv build.svg public/build.svg
+        
+    after_script:
+        - cp colgraphweb/static/favicon.ico public/static
+        
+    artifacts:
+        paths:
+            - public/
+            - build/
+            - dist/
+            - docs/
+            - libcolgraph.egg-info/
+            - setup.py
+    only:
+        refs:
+            - master
+        changes:
+            - .pipeline.trigger
+    allow_failure: true
+    environment:
+        name: dev
+
+
+pages:
+    stage: status
+    dependencies:
+        - build
+    script:
+        - mkdir -p public
+        #- mv public/index.txt public/index.html
+    artifacts:
+        paths:
+            - public/
+    only:
+        refs:
+            - master
+        changes:
+            - .pipeline.trigger
+

@@ -1,0 +1,6 @@
+coloredlogs
+matplotlib
+Flask
+networkx
+PySimpleGUI
+pdoc

@@ -1,0 +1,47 @@
+{% block content %}
+   <div id="optionsbar">
+      <button id="generate-button" onclick="generate()">Generate</button>
+      <input id="numcolors-textfield" type="text" name="k" value="{{ colors }}">
+      <button id="random-button" onclick="randomgraph()">Random</button>
+      <button id="save-button" onclick="save()">Save</button>
+      <button id="load-button" onclick="load_file()">Load</button>
+      <button id="refresh-button" onclick="refresh_page()">
+          Refresh cache (if laggy)
+      </button>
+      <button id="force-cg-button" onclick="get_cg_data()">
+          ColoringGraph hidden. Force (re)generate?
+      </button>
+  </div>
+  <div>
+      <p style="display:inline"> STATS: </p>
+      <p style="display:inline" id="topstatsdisplay">{{ stats }}</p>
+   </div>
+   <div class="parent grid-parent">
+
+     <div>
+       <div>
+        {% with container_type="bg" %}
+          {% include "graphcontainer.html"  %}
+        {% endwith %}
+       </div>
+       <div>
+        {% with container_type="mcg" %}
+          {% include "graphcontainer.html"  %}
+        {% endwith %}
+       </div>
+     </div>
+
+    <div>
+      <div>
+          {% with container_type="cg" %}
+            {% include "graphcontainer.html"  %}
+          {% endwith %}
+      </div>
+      <div>
+          {% with container_type="pcg" %}
+            {% include "graphcontainer.html"  %}
+          {% endwith %}
+      </div>
+    </div>
+  </div>
+{% endblock %}
