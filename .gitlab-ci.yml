@@ -6,7 +6,7 @@ variables:
 
 stages:
     - deploy
-    - status
+    - web
 
 build:
     image: "quay.io/pypa/manylinux2010_x86_64"
@@ -23,7 +23,7 @@ build:
         - yum install -y -q automake autoconf pcre-devel
         - yum -y -q update
         - /opt/python/cp35-cp35m/bin/pip install -U setuptools wheel twine auditwheel
-        - /opt/python/cp35-cp35m/bin/pip install -U anybadge
+        #- /opt/python/cp35-cp35m/bin/pip install -U anybadge
         - git clone https://github.com/swig/swig.git
         - cd swig
         - git checkout rel-4.0.0
@@ -32,18 +32,25 @@ build:
         - make
         - make install
         - cd ..
+        - git clone https://github.com/m7thon/doxy2swig
+        - mv doxy2swig/doxy2swig.py .
+        - /opt/python/cp35-cp35m/bin/pip install -U pdoc3
+        
         
     # compile libcolgraph and copy status (build.svg) to public/
     script:
-        - /opt/python/cp35-cp35m/bin/python setup.py sdist bdist_wheel
         - make docs
+        - /opt/python/cp35-cp35m/bin/python setup.py sdist bdist_wheel
         - auditwheel repair dist/*.whl -w dist
-        - if /opt/python/cp35-cp35m/bin/python -m twine upload dist/*.tar.gz  --verbose && /opt/python/cp35-cp35m/bin/python -m twine upload dist/*manylinux*.whl --verbose; then echo "PASSED JOB" && /opt/python/cp35-cp35m/bin/python -m anybadge --label=pipeline --value=passing --file=build.svg passing=green failing=red; else echo "FAILED JOB" && /opt/python/cp35-cp35m/bin/python -m anybadge --label=pipeline --value=failing --file=build.svg passing=green  failing=red; fi
-        - mkdir -p public; mv build.svg public/build.svg
+        - /opt/python/cp35-cp35m/bin/python -m twine upload dist/*.tar.gz  --verbose
+        - /opt/python/cp35-cp35m/bin/python -m twine upload dist/*manylinux*.whl --verbose
+        #- if /opt/python/cp35-cp35m/bin/python -m twine upload dist/*.tar.gz  --verbose && /opt/python/cp35-cp35m/bin/python -m twine upload dist/*manylinux*.whl --verbose; then echo "PASSED JOB" && /opt/python/cp35-cp35m/bin/python -m anybadge --label=pipeline --value=passing --file=build.svg passing=green failing=red; else echo "FAILED JOB" && /opt/python/cp35-cp35m/bin/python -m anybadge --label=pipeline --value=failing --file=build.svg passing=green  failing=red; fi
+        #- mkdir -p public; mv build.svg public/build.svg
         
     after_script:
         - mkdir -p public/static
         - cp libcolgraph/web/static/favicon.ico public/static
+        - /opt/python/cp35-cp35m/bin/python setup.py install
         
     artifacts:
         paths:
@@ -53,18 +60,19 @@ build:
             - docs/
             - libcolgraph.egg-info/
             - setup.py
+            - requirements.txt
     only:
         refs:
             - master
         changes:
             - .pipeline.trigger
-    allow_failure: true
+    allow_failure: false
     environment:
         name: dev
 
 
 pages:
-    stage: status
+    stage: web
     dependencies:
         - build
     script:
