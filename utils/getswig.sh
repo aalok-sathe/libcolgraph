@@ -11,7 +11,7 @@ set -e
 # download swig because it was not found
 curl --remote-name https://gigenet.dl.sourceforge.net/project/swig/swig/swig-4.0.1/swig-4.0.1.tar.gz
 tar xzvf swig-4.0.1.tar.gz
-cd swig-4.0.1.tar.gz
+cd swig-4.0.1
 
 # install locally so we dont need to ask for privileges
 ./configure --prefix="$HOME/.swig"
@@ -28,4 +28,6 @@ echo 'export PATH="$PATH:$HOME/.swig/bin"' >> ~/.bashrc
 source ~/.bash_profile
 source ~/.bashrc
 
+cd ..
 echo "INFO finished installing swig: $(which swig)"
+
