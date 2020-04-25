@@ -17,7 +17,8 @@ options = {
         "hover": true,
         "dragNodes": true,
         "hideEdgesOnDrag": false,
-        "hideNodesOnDrag": false
+        "hideNodesOnDrag": false,
+        "multiselect": true
     },
     "physics": {
         "barnesHut": {
@@ -133,7 +134,8 @@ function makemcg() {
     };
     // create a metagraph
     metacoloringgraph = new vis.Network(mcgcontainer, mcgdata, mcgoptions);
-    metacoloringgraph.setOptions({"physics": {"stabilization": {"enabled": true}}});
+    metacoloringgraph.setOptions({"physics": {"stabilization": {"enabled": true}},
+                                  "interaction": {"hideEdgesOnDrag": true}});
     metacoloringgraph.on("stabilizationIterationsDone", function (params) {
         metacoloringgraph.fit();
     });
@@ -209,13 +211,12 @@ function generate(e) {
             var bgcontainer = $('#bgcontainer');
             bgcontainer.html(response['bgcontainer']);
             makebg();
-            var cgcontainer = $('#cgcontainer');
-            cgcontainer.html(response['cgcontainer']);
             if (Number(response['cgsize']) <= 512) {
                 $('#force-cg-button').hide();
+                var cgcontainer = $('#cgcontainer');
+                cgcontainer.html(response['cgcontainer']);
                 makecg();
                 coloringgraph.stabilize();
-                coloringgraph.fit();
             } else {
                 alert('coloringgraph not loaded due to size. you can choose to display it anyway.');
                 $('#force-cg-button').show();
@@ -271,7 +272,7 @@ function get_stats(e) {
         success: function (response) {
             // alert('RESPONSE OK');
             cgstats = response['stats'];
-            $('#topstatsdisplay').text(cgstats);
+            $('#topstatsdisplay').html(cgstats);
         },
         error: function (response) {
             alert('ERROR', response);
@@ -337,6 +338,27 @@ function randomgraph(e) {
     });
 }
 
+
+function toggle_physics(e) {
+    function toggle_physics_on_network(network) { 
+        network.setOptions( 
+            { physics: !network.physics["physicsEnabled"] } 
+        );
+    }
+    var toggleables = ['coloringgraph', 'partialcoloringgraph', 'basegraph'];
+    for (i in toggleables) {
+        network = toggleables[i];
+        if(window.hasOwnProperty(network))
+            toggle_physics_on_network(window[network]); 
+    }
+    var value = $('#toggle-physics-button').html();  
+    if (value.includes('ON')) {
+       $('#toggle-physics-button').html('Physics: OFF'); 
+    } else {
+       $('#toggle-physics-button').html('Physics: ON'); 
+    }
+    return;
+}
 
 
 function refresh_page(e) {

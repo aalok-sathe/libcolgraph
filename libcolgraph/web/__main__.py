@@ -7,6 +7,7 @@ import sys
 import webbrowser
 import random
 import time
+import itertools
 import PySimpleGUI as sg
 import os.path
 
@@ -301,20 +302,20 @@ def colorbg_from_cg():
     whatclicked = requestdata[1]
 
     if whatclicked == 'node':
-        selected_vertex = requestdata[0][0]
-        coloring = app.cg.get_possible_colors([selected_vertex])
-
-        return colorbg(coloring)
+        selected_vertices = requestdata[0]
 
     elif whatclicked == 'edge':
-        selected_edge = requestdata[0][0]
-        (a, b) = selected_edge.split()
-
-        coloring = app.cg.get_possible_colors([int(a), int(b)])
-        return colorbg(coloring)
+        selected_edges = [[int(v) for v in edge.split()] 
+                          for edge in requestdata[0]]
+        selected_vertices = list(itertools.chain.from_iterable(selected_edges))
 
     else:
-        raise RuntimeWarning
+        raise RuntimeWarning('unknown selection')
+
+    print('DEBUG selected vertices:', selected_vertices)
+    coloring = app.cg.get_possible_colors(selected_vertices)
+    return colorbg(coloring)
+
 
 
 @app.route('/colorbg', methods=['POST'])
@@ -472,12 +473,14 @@ def generate_random():
     return response
 
 
-def runflaskgui(url='http://localhost', port='5000'):
+def runflaskgui(url='http://localhost', port='5000', env='development',
+                                                     debug=args.debug,
+                                                     testing=True):
     '''
     '''
-    app.config['ENV'] = 'development'
-    app.config['DEBUG'] = args.debug
-    app.config['TESTING'] = True
+    app.config['ENV'] = env
+    app.config['DEBUG'] = debug
+    app.config['TESTING'] = testing
 
     bg = lcg.BaseGraph()
     if args.input_file:
