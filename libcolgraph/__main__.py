@@ -7,8 +7,12 @@ from pathlib import Path
 
 
 def main():
-    public = Path(__file__).parent/'..'/'public'
-    public = public.resolve()
+    try:
+        public = Path(__file__).parent/'..'/'public'
+        public = public.resolve()
+        public = 'file://{}/index.html'.format(public)
+    except FileNotFoundError as e:
+        public = 'https://aalok-sathe.gitlab.io/libcolgraph'
 
     helptxt = '''
         Hi there, welcome to libcolgraph!
@@ -16,7 +20,7 @@ def main():
         GNU Lesser General Public License (LGPL) version 3 or later.
         Multiple contributors.
         
-        ''' + 'Homepage: https://aalok-sathe.gitlab.io/libcolgraph'.format(public) + '''
+        ''' + 'Homepage: {}'.format(public) + '''
         
         To launch the interactive web interface, use `python3 -m libcolgraph.web [-h]`.
         '''
