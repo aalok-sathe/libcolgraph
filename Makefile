@@ -27,7 +27,7 @@ build: swig $(TARGET) exist
 again: clean build
 
 #$(SOURCES)
-$(TARGET): $(CSOURCES) $(ISOURCES)
+$(TARGET): $(CSOURCES) $(ISOURCES) $(MODULE)/swigsrc/docs.i
 	echo "building target $@"
 	# $(MAKE) -C $(MODULE)
 	python3 setup.py build_ext --inplace
@@ -63,12 +63,13 @@ trigger:
 	date | cat > .pipeline.trigger
 
 docs: Doxyfile $(MODULE)/swigsrc/docs.i $(wildcard $(MODULE)/**/%.py) $(TARGET) README.md
-	doxygen Doxyfile
-	doxy2swig* docs/xml/index.xml libcolgraph/swigsrc/docs.i -catfo
 	pdoc -o docs --html --force libcolgraph
 	mkdir -p public/
 	cp -r docs/libcolgraph public/
 
+$(MODULE)/swigsrc/docs.i: $(CSOURCES)
+	doxygen Doxyfile
+	doxy2swig docs/xml/index.xml libcolgraph/swigsrc/docs.i -catfo
 
 ####################
 ####    cleanup ####
