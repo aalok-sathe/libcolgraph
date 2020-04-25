@@ -95,7 +95,7 @@ install: package deps
 
 deps: requirements.txt
 	python3 utils/install.py
-	    pip3 install -r requirements.txt
+	# pip3 install -r requirements.txt
 
 uninstall: clean
 	echo "uninstalling $(MODULE)"
