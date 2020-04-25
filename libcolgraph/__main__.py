@@ -16,7 +16,7 @@ def main():
         GNU Lesser General Public License (LGPL) version 3 or later.
         Multiple contributors.
         
-        ''' + 'Homepage: file://{}/index.html'.format(public) + '''
+        ''' + 'Homepage: https://aalok-sathe.gitlab.io/libcolgraph'.format(public) + '''
         
         To launch the interactive web interface, use `python3 -m libcolgraph.web [-h]`.
         '''
