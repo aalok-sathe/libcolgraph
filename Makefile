@@ -55,7 +55,7 @@ exist:
 ####    packaging   ####
 ########################
 
-package: $(TARGET) trigger
+package: $(TARGET)
 	python3 setup.py sdist bdist_wheel
 
 trigger:
@@ -95,11 +95,11 @@ install: package deps
 
 deps: requirements.txt
 	python3 utils/install.py
-	python3 -m pip install --user -r requirements.txt --quiet
+	pip3 install -r requirements.txt
 
 uninstall:
 	echo "uninstalling $(MODULE)"
-	python3 -m pip uninstall libcolgraph
+	pip3 uninstall -y libcolgraph
 
 
 ############

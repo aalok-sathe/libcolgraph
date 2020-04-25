@@ -1,5 +1,6 @@
 coloredlogs
 matplotlib
+cycler
 Flask
 networkx
 PySimpleGUI

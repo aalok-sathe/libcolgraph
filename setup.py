@@ -72,6 +72,7 @@ setup(name='libcolgraph',
       install_requires = [
         'coloredlogs',
         'matplotlib',
+        'cycler',
         'Flask',
         'networkx',
         'PySimpleGUI',
