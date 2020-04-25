@@ -90,7 +90,7 @@ clean:
 ################################################
 
 install: package deps
-	echo "INFO installing $MODULE"
+	echo "INFO installing $(MODULE)"
 	python3 setup.py install --user
 
 deps: requirements.txt
@@ -98,7 +98,7 @@ deps: requirements.txt
 	python3 -m pip install --user -r requirements.txt --quiet
 
 uninstall:
-	echo "uninstalling $MODULE"
+	echo "uninstalling $(MODULE)"
 	python3 -m pip uninstall libcolgraph
 
 
