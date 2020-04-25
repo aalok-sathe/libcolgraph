@@ -6,7 +6,7 @@ from collections import defaultdict
 from pathlib import Path
 
 
-if __name__ == '__main__':
+def main():
     public = Path(__file__).parent/'..'/'public'
     public = public.resolve()
 
@@ -21,3 +21,7 @@ if __name__ == '__main__':
         To launch the interactive web interface, use `python3 -m libcolgraph.web [-h]`.
         '''
     print(helptxt)
+    
+
+if __name__ == '__main__':
+    main()

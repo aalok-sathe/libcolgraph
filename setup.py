@@ -56,7 +56,7 @@ setup(name='libcolgraph',
       },
       packages = setuptools.find_packages(),
       include_package_data=True,
-      package_data={'web': ['*.html', '*.css', '*.js']},
+      package_data={'web': ['*.html', '*.css', '*.js', 'public/']},
       version='0.0.6', #VERSION #TODO
       description='this library provides support to construct graphs and their '
                   'coloring graphs. a coloring graph is a metagraph '

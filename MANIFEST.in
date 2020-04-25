@@ -6,3 +6,5 @@ include libcolgraph/web/static/*
 graft libcolgraph/web/static
 graft libcolgraph/web/templates
 global-exclude *.pyc
+include public/*
+graft public

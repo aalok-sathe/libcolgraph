@@ -95,9 +95,9 @@ install: package deps
 
 deps: requirements.txt
 	python3 utils/install.py
-	pip3 install -r requirements.txt
+	    pip3 install -r requirements.txt
 
-uninstall:
+uninstall: clean
 	echo "uninstalling $(MODULE)"
 	pip3 uninstall -y libcolgraph
 
