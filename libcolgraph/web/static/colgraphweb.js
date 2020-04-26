@@ -166,10 +166,6 @@ function makepcg() {
     return partialcoloringgraph;
 }
 
-basegraph = makebg();
-coloringgraph = makecg();
-metacoloringgraph = makemcg();
-partialcoloringgraph = makepcg();
 
 function objectToArray(obj) {
     return Object.keys(obj).map(function (key) {
@@ -273,6 +269,7 @@ function get_stats(e) {
             // alert('RESPONSE OK');
             cgstats = response['stats'];
             $('#topstatsdisplay').html(cgstats);
+            $optionsgrid.packery('layout');
         },
         error: function (response) {
             alert('ERROR', response);
@@ -357,6 +354,8 @@ function toggle_physics(e) {
     } else {
        $('#toggle-physics-button').html('Physics: ON'); 
     }
+    $optionsgrid.packery('layout');
+    
     return;
 }
 
@@ -370,3 +369,110 @@ function refresh_page(e) {
     // generate();
     // get_stats();
 }
+
+
+function initial_setup() {
+    basegraph = makebg();
+    coloringgraph = makecg();
+    metacoloringgraph = makemcg();
+    partialcoloringgraph = makepcg();
+    
+    $optionsgrid = $('.pgrid').packery({
+      // options
+      itemSelector: '.pgrid-item',
+      gutter: 8,
+      percentPosition: true,
+      resize: true,  
+    });
+    
+    // $('.ggrid').height($(window).height());
+    $grid = $('.ggrid').packery({
+      // options
+      itemSelector: '.ggrid-item',
+      percentPosition: true,
+    });
+    
+    
+    gdraggies = [];
+    $grid.find('.ggrid-item').each( function( i, gridItem ) {
+        var draggie = new Draggabilly( gridItem );
+        // bind drag events to Packery
+        $grid.packery( 'bindDraggabillyEvents', draggie );
+        gdraggies.push(draggie);
+    });
+    isDrag = true;
+    toggle_drag();
+    
+    var $griditems = $( $grid.packery('getItemElements') );
+    console.log($griditems);
+    
+    /*$griditems.resizable({
+			    grid: 10,
+			    handles: { 
+			        'nw': '#nwgrip', 
+			        'ne': '#negrip', 
+			        'sw': '#swgrip', 
+			        'se': '#segrip', 
+			        'n': '#ngrip', 
+			        'e': '#egrip', 
+			        's': '#sgrip', 
+			        'w': '#wgrip' 
+			    },
+			    start: function(event,ui){
+			    	if($(event.target).hasClass('item')){
+		    			$(event.target).css('z-index', 1000);
+		    		}
+			    },
+			    resize: function(event,ui){
+              		$grid.packery( 'fit', event.target, ui.position.left, ui.position.top );
+			    },
+			    cancel: '.stamp',
+			    stop: function(event,ui){
+              		$(event.target).css('z-index','auto');
+              		$grid.packery();
+			    },   
+			    refreshPositions: true
+			  });*/
+    
+    $grid.on( 'dblclick', '.ggrid-item', function( event ) {
+        var $item = $( event.currentTarget );
+        // change size of item by toggling large class
+        if ( $item.is('.ggrid-item--large') ) {
+            $item.toggleClass('ggrid-item--large');
+        } else if ( $item.is('.ggrid-item--medium') ) {
+            $item.toggleClass('ggrid-item--medium');
+            $item.toggleClass('ggrid-item--large');
+        } else {
+            $item.toggleClass('ggrid-item--medium');
+        }
+        
+        
+        if ( $item.is('.ggrid-item--large') || $item.is('.ggrid-item--medium') ) {
+            // fit large item
+            $grid.packery( 'fit', event.currentTarget );
+        } else {
+            // back to small, shiftLayout back
+            $grid.packery('shiftLayout');
+        }
+        $grid.packery('layout');
+    });
+}
+
+function toggle_drag() {
+    var method = isDrag ? 'disable' : 'enable';
+    isDrag = !isDrag;
+    
+    gdraggies.forEach( function( draggie ) {
+        draggie[ method ]();
+    });
+    var value = $('#toggle-drag-button').html();  
+    if (value.includes('ON')) {
+       $('#toggle-drag-button').html('Drag: OFF'); 
+    } else {
+       $('#toggle-drag-button').html('Drag: ON'); 
+    }
+    $optionsgrid.packery('layout');
+}
+
+
+

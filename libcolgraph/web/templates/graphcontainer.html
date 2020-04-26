@@ -1,9 +1,10 @@
 <script type="text/javascript">
-  var {{ container_type }}nodes;
-  var {{ container_type }}edges;
+  {{ container_type }}nodes = [];
+  {{ container_type }}edges = [];
   //var {{ container_type }}options;
   // "{{ container_type }}"
   {% if container_type == "bg" %}
+    
     {{ container_type }}nodes = {{ bgnodes|safe }};
     {{ container_type }}edges = {{ bgedges|safe }};
     //{{ container_type }}options = {{ bgoptions|safe }};
@@ -23,21 +24,10 @@
 
 </script>
 
-<div id="{{ container_type }}container">
-    <div class="vis-network" style="position: relative; overflow: hidden; touch-action: pan-y; -moz-user-select: none; width: 100%; height: 100%;" tabindex="900"></div>
-    <canvas style="position: relative; touch-action: none; -moz-user-select: none; width: 100%; height: 100%;" width="600" height="400"></canvas>
-
-    {% if container_type == "cg" %}
-    <div id="loadingBar" class="loadingBar">
-        <div class="outerBorder">
-            <div id="text">0%</div>
-            <div id="border">
-                <div id="bar" class="bar"></div>
-            </div>
-        </div>
+<div class="ggrid-item">
+    <div style="height:5%;"><p>{{container_type}}</p></div>  
+    <div id="{{ container_type }}container" class="network-container container" style="height:85%">
+        <div class="vis-network container" style="position: relative; overflow: hidden; touch-action: pan-y; -moz-user-select: none; width: 100%; height: 100%;" tabindex="900"></div>
+        <!--canvas class="vis-canvas container" style="position: relative; touch-action: none; -moz-user-select: none; width: 100%; height: 100%;"></canvas-->
     </div>
-    {% endif %}
-
-    {# include "topbar.html" #}
-
 </div>

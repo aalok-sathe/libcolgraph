@@ -1,55 +1,85 @@
-{% block content %}
-   <div id="optionsbar">
+{% block content %}    
+   <div id="optionsbar" class="pgrid">
+   
+    <div class="pgrid-item">
       <button id="generate-button" onclick="generate()">Generate</button>
-      <input id="numcolors-textfield" type="text" name="k" value="{{ colors }}">
+    </div>
+    <div class="pgrid-item">
+      k =
+      <input type="number" id="numcolors-textfield" name="k" min="0" max="11" value="{{ colors }}">
+      <!--input id="numcolors-textfield" type="text" name="k" value="{{ colors }}"-->
+    </div>
+    <div class="pgrid-item">
       <button id="save-button" onclick="save()">Save</button>
+    </div>
+    <div class="pgrid-item">
       <button id="load-button" onclick="load_file()">Load</button>
-      
+    </div>
+   
+    <div class="pgrid-item">
       <button id="random-button" onclick="randomgraph()">Random</button>
+    </div>
+    
+    <div class="pgrid-item">
       <button id="refresh-button" onclick="refresh_page()">
           Refresh cache (if lagging)
       </button>
+    </div>
+    <div class="pgrid-item">
       <button id="force-cg-button" onclick="get_cg_data()">
           ColoringGraph hidden. Force display?
       </button>
+    </div>
+    <div class="pgrid-item">
       <button id="toggle-physics-button" onclick="toggle_physics()">
           Physics: ON
       </button>
+    </div>
+    
+    <div class="pgrid-item">
+      <button id="toggle-drag-button" onclick="toggle_drag()">
+          Drag: ON
+      </button>
+    </div>
       
+    <div class="pgrid-item">
+      <button id="reset-layout-button" onclick="$grid.packery('layout');">
+          Reset layout
+      </button>
+    </div>
+      
+    <div class="pgrid-item">
       <button id="help-button" onclick="window.open('https://aalok-sathe.gitlab.io/libcolgraph/libcolgraph/web', '_blank')">
           Help
       </button>
-  </div>
-  <div>
-      <p style="display:inline"> STATS: </p>
-      <p style="display:inline" id="topstatsdisplay">{{ stats }}</p>
-   </div>
-   <div class="parent grid-parent">
-
-     <div>
-       <div>
-        {% with container_type="bg" %}
-          {% include "graphcontainer.html"  %}
-        {% endwith %}
-       </div>
-       <div>
-        {% with container_type="mcg" %}
-          {% include "graphcontainer.html"  %}
-        {% endwith %}
-       </div>
-     </div>
-
-    <div>
-      <div>
-          {% with container_type="cg" %}
-            {% include "graphcontainer.html"  %}
-          {% endwith %}
-      </div>
-      <div>
-          {% with container_type="pcg" %}
-            {% include "graphcontainer.html"  %}
-          {% endwith %}
-      </div>
     </div>
+
+     <div class="pgrid-item pgrid-item--wide">
+        <p style="display:inline">  </p>
+        <p style="display:inline" id="topstatsdisplay">STATS: {{ stats }}</p>
+     </div>
+   
+   </div>
+   
+   
+   <div class="ggrid">
+
+
+        {% with container_type="bg" %}
+            {% include "graphcontainer.html"  %}
+        {% endwith %}
+
+        {% with container_type="mcg" %}
+            {% include "graphcontainer.html"  %}
+        {% endwith %}
+
+        {% with container_type="cg" %}
+            {% include "graphcontainer.html"  %}
+        {% endwith %}
+
+        {% with container_type="pcg" %}
+            {% include "graphcontainer.html"  %}
+        {% endwith %}
+
   </div>
 {% endblock %}

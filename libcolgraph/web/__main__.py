@@ -483,11 +483,15 @@ def runflaskgui(url='http://localhost', port='5000', env='development',
     app.config['TESTING'] = testing
 
     bg = lcg.BaseGraph()
+    app.cg = cg = bg.build_coloring_graph(0)
+    app.mcg = mcg = cg.tarjans()
+    app.cut_verts = cut_verts = [*mcg.get_cut_vertices()]
+    app.pcg = pcg = mcg.rebuild_partial_graph()
+    app.mother_verts = mother_verts = [*mcg.get_mothership_cut_vertices()]
+    
     if args.input_file:
         bg.load_txt(args.input_file)
     app.bg = bg
-
-    update_bg_data(bg)
 
     if args.render_on_launch:
         app.cg = cg = bg.build_coloring_graph(args.colors)
@@ -496,18 +500,20 @@ def runflaskgui(url='http://localhost', port='5000', env='development',
         app.pcg = pcg = mcg.rebuild_partial_graph()
         app.mother_verts = mother_verts = [*mcg.get_mothership_cut_vertices()]
 
-        update_mcg_data(mcg)
-        update_cg_data(cg)
-        update_pcg_data(pcg)
+    update_bg_data(bg)
+    update_mcg_data(mcg)
+    update_cg_data(cg)
+    update_pcg_data(pcg)
 
-        app.statsdict = statsdict = dict(
-            cgsize=len(cg),
-            is_connected=cg.is_connected(),
-            is_biconnected=cg.is_biconnected(),
-        )
-        data.update({'stats': ' '.join(['{}: {},'.format(k, v)
-                                for k, v in app.statsdict.items()])})
+    app.statsdict = statsdict = dict(
+        cgsize=len(cg),
+        is_connected=cg.is_connected(),
+        is_biconnected=cg.is_biconnected(),
+    )
+    data.update({'stats': ' '.join(['{}: {},'.format(k, v)
+                 for k, v in app.statsdict.items()])})
 
+    
     app.run(port=port, threaded=args.threaded)
 
 

@@ -1,0 +1,104 @@
+body {
+  margin: 1px;
+  overflow: scroll;
+}
+
+* {
+  -webkit-box-sizing: border-box;
+     -moz-box-sizing: border-box;
+          box-sizing: border-box;
+}
+
+.pgrid-item {
+}
+
+.pgrid-item > button { 
+    background-color: #000066;
+    border: 1px solid black;
+    color: white;
+    cursor: pointer;
+}
+
+.pgrid-item--wide { width: 50%; }
+
+.pgrid-item.is-dragging,
+.pgrid-item.is-positioning-post-drag {
+  background: #C90;
+  z-index: 2; /* keep dragged item on top */
+}
+
+.ggrid {
+    width: 100%;
+}
+
+/* clearfix */
+.ggrid:after {
+  content: ' ';
+  display: block;
+  clear: both;
+}
+/* clearfix */
+.ggrid-item:after {
+  content: ' ';
+  display: block;
+  clear: both;
+}
+
+.ggrid-item {
+    float: left;
+    width: 20%;
+    height: 200px;
+    border: 4px solid black;
+    border-color: gray;
+    background-color: black;
+}
+.ggrid-item:hover{
+    cursor: pointer;
+}
+
+.ggrid-item--medium {
+    float: left;
+    width: 30%;
+    height: 350px;
+    border: 4px solid black;
+    border-color: gray;
+    background-color: black;
+}
+
+.ggrid-item--large {
+    float: left;
+    width: 45%;
+    height: 600px;
+    border: 4px solid black;
+    border-color: gray;
+    background-color: black;
+}
+
+.ggrid-item > container { 
+    background-color: black;
+    cursor: pointer;
+}
+.ggrid-item > div > p { 
+    background-color: white;
+    color: white;
+    height: 5%;
+}
+
+.stamp {
+  position: absolute;
+  background: white;
+  border: 4px dotted black;
+}
+
+
+.ggrid-item.is-dragging,
+.ggrid-item.is-positioning-post-drag {
+  background: white;
+  z-index: 2; /* keep dragged item on top */
+}
+.packery-drop-placeholder {
+  outline: 3px dashed hsla(0, 0%, 0%, 0.5);
+  outline-offset: -6px;
+  -webkit-transition: -webkit-transform 0.2s;
+          transition: transform 0.2s;
+}
