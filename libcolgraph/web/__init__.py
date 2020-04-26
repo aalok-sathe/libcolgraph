@@ -3,6 +3,17 @@
 libcolgraph.web
 
 
+Web UI Tutorial
+---------------
+1. double click on a window to enlarge it; double click again to make it a large size; and yet again to restore to original
+2. load a `BaseGraph` either via command line (see below) or using the 'load' button in the app
+3. enter k= number of colors to color it with
+4. hit 'generate' to generate graphs
+
+you can toggle physics using a dedicated button. you can enable/disable window drag mode and move windows around to your
+taste.
+
+
 Usage
 -----
     libcolgraph.web [-h] [-i INPUT_FILE] [-n] [-s] [-k COLORS] [-v] [-p PORT]
