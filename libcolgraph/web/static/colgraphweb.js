@@ -99,15 +99,15 @@ function makebg() {
         nodes: bgnodes,
         edges: bgedges
     };
-    // create a basegraph
-    basegraph = new vis.Network(bgcontainer, bgdata, bgoptions);
-    basegraph.setOptions({"manipulation": {"enabled": true}});
-    basegraph.setOptions({"physics": {"stabilization": {"enabled": true}}});
-    basegraph.on("stabilizationIterationsDone", function (params) {
-        basegraph.fit();
+    // create a bg
+    bg = new vis.Network(bgcontainer, bgdata, bgoptions);
+    bg.setOptions({"manipulation": {"enabled": true}});
+    bg.setOptions({"physics": {"stabilization": {"enabled": true}}});
+    bg.on("stabilizationIterationsDone", function (params) {
+        bg.fit();
     });
-    basegraph.stabilize();
-    return basegraph;
+    bg.stabilize();
+    return bg;
 }
 
 function makecg() {
@@ -117,13 +117,13 @@ function makecg() {
         edges: cgedges
     };
     // create a coloringgraph
-    coloringgraph = new vis.Network(cgcontainer, cgdata, cgoptions);
-    coloringgraph.setOptions({"interaction": {"hideEdgesOnDrag": true}});
-    coloringgraph.fit();
+    cg = new vis.Network(cgcontainer, cgdata, cgoptions);
+    cg.setOptions({"interaction": {"hideEdgesOnDrag": true}});
+    cg.fit();
 
-    coloringgraph.on("click", color_on_click("/colorbg_from_cg"));
+    cg.on("click", color_on_click("/colorbg_from_cg"));
 
-    return coloringgraph;
+    return cg;
 }
 
 function makemcg() {
@@ -133,18 +133,18 @@ function makemcg() {
         edges: mcgedges
     };
     // create a metagraph
-    metacoloringgraph = new vis.Network(mcgcontainer, mcgdata, mcgoptions);
-    metacoloringgraph.setOptions({"physics": {"stabilization": {"enabled": true}},
+    mcg = new vis.Network(mcgcontainer, mcgdata, mcgoptions);
+    mcg.setOptions({"physics": {"stabilization": {"enabled": true}},
                                   "interaction": {"hideEdgesOnDrag": true}});
-    metacoloringgraph.on("stabilizationIterationsDone", function (params) {
-        metacoloringgraph.fit();
+    mcg.on("stabilizationIterationsDone", function (params) {
+        mcg.fit();
     });
-    metacoloringgraph.stabilize();
+    mcg.stabilize();
 
-    // listener to color the BaseGraph
-    metacoloringgraph.on("click", color_on_click("/colorbg_from_mcg"));
+    // listener to color the bg
+    mcg.on("click", color_on_click("/colorbg_from_mcg"));
 
-    return metacoloringgraph;
+    return mcg;
 }
 
 function makepcg() {
@@ -154,16 +154,16 @@ function makepcg() {
         edges: pcgedges
     };
     // create a metagraph
-    partialcoloringgraph = new vis.Network(pcgcontainer, pcgdata, pcgoptions);
-    partialcoloringgraph.setOptions({"physics": {"stabilization": {"enabled": true}}});
-    partialcoloringgraph.on("stabilizationIterationsDone", function (params) {
-        partialcoloringgraph.fit();
+    pcg = new vis.Network(pcgcontainer, pcgdata, pcgoptions);
+    pcg.setOptions({"physics": {"stabilization": {"enabled": true}}});
+    pcg.on("stabilizationIterationsDone", function (params) {
+        pcg.fit();
     });
-    partialcoloringgraph.stabilize();
+    pcg.stabilize();
 
-    partialcoloringgraph.on("click", color_on_click("/colorbg_from_cg"));
+    pcg.on("click", color_on_click("/colorbg_from_cg"));
 
-    return partialcoloringgraph;
+    return pcg;
 }
 
 
@@ -195,7 +195,7 @@ function exportNetwork(network) {
 
 function generate(e) {
     // e.preventDefault();
-    var value = exportNetwork(basegraph);
+    var value = exportNetwork(bg);
     $.ajax({
         type: "POST",
         url: "/generate",
@@ -212,7 +212,7 @@ function generate(e) {
                 var cgcontainer = $('#cgcontainer');
                 cgcontainer.html(response['cgcontainer']);
                 makecg();
-                coloringgraph.stabilize();
+                cg.stabilize();
             } else {
                 alert('coloringgraph not loaded due to size. you can choose to display it anyway.');
                 $('#force-cg-button').show();
@@ -235,7 +235,7 @@ function generate(e) {
 
 
 function get_cg_data(e) {
-    var value = exportNetwork(basegraph);
+    var value = exportNetwork(bg);
     $.ajax({
         type: "POST",
         url: "/cgdata",
@@ -258,7 +258,7 @@ function get_cg_data(e) {
 
 
 function get_stats(e) {
-    var value = exportNetwork(basegraph);
+    var value = exportNetwork(bg);
     $.ajax({
         type: "POST",
         url: "/cgstats",
@@ -279,7 +279,7 @@ function get_stats(e) {
 
 
 function save(e) {
-    var value = exportNetwork(basegraph);
+    var value = exportNetwork(bg);
     $.ajax({
         type: "POST",
         url: "/save",
@@ -297,7 +297,7 @@ function save(e) {
 
 
 function load_file(e) {
-    var value = exportNetwork(basegraph);
+    var value = exportNetwork(bg);
     $.ajax({
         type: "POST",
         url: "/load",
@@ -317,7 +317,7 @@ function load_file(e) {
 
 
 function randomgraph(e) {
-    var value = exportNetwork(basegraph);
+    var value = exportNetwork(bg);
     $.ajax({
         type: "POST",
         url: "/generate_random",
@@ -337,25 +337,25 @@ function randomgraph(e) {
 
 
 function toggle_physics(e) {
-    function toggle_physics_on_network(network) { 
-        network.setOptions( 
-            { physics: !network.physics["physicsEnabled"] } 
+    function toggle_physics_on_network(network) {
+        network.setOptions(
+            { physics: !network.physics["physicsEnabled"] }
         );
     }
-    var toggleables = ['coloringgraph', 'partialcoloringgraph', 'basegraph'];
+    var toggleables = ['cg', 'pcg', 'bg'];
     for (i in toggleables) {
         network = toggleables[i];
         if(window.hasOwnProperty(network))
-            toggle_physics_on_network(window[network]); 
+            toggle_physics_on_network(window[network]);
     }
-    var value = $('#toggle-physics-button').html();  
+    var value = $('#toggle-physics-button').html();
     if (value.includes('ON')) {
-       $('#toggle-physics-button').html('Physics: OFF'); 
+       $('#toggle-physics-button').html('Physics: OFF');
     } else {
-       $('#toggle-physics-button').html('Physics: ON'); 
+       $('#toggle-physics-button').html('Physics: ON');
     }
     $optionsgrid.packery('layout');
-    
+
     return;
 }
 
@@ -370,72 +370,82 @@ function refresh_page(e) {
     // get_stats();
 }
 
+function add_ctxt_menu() {
+    $(function() {
+    $.contextMenu({
+        selector: '.context-menu',
+        callback: function(itemKey, opt, e) {
+            // Alert the key of the item and the trigger element's id.
+            console.log("Clicked on " + itemKey + " on element " + opt.$trigger + " " + e);
+            var container = opt.$trigger.children()[1].id;
+            var graphcls = container.substring(container.indexOf('container'), container.length);
+            var net = window[graphcls];
+            // Do not close the menu after clicking an item
+            var value = exportNetwork(bg);
+            console.log(value);
+            $.ajax({
+                type: "POST",
+                url: "/savesvg",
+                data: value,
+                contentType: "application/json; charset=utf-8",
+                dataType: "json",
+                success: function (response) {
+                    alert('saved svg');
+                },
+                error: function (response) {
+                    alert('ERROR', response);
+                }
+            });
+            return true;
+        },
+        items: {
+            // <input type="text">
+            savecmd: {
+                name: 'Save canvas as svg',
+                icon: 'fa-floppy-o',
+                events: {
+                    keyup: function(e) {
+                        // add some fancy key handling here?
+                        console.log('key: '+ e.keyCode);
+                    },
+                },
+            },
+            /*
+            sep1: "---------",
+            // <select>
+            size: {
+                name: 'Canvas size',
+                icon: 'fa-window-maximize',
+                type: 'select',
+                options: {1: 'tiny', 2: 'small', 3: 'medium', 4: 'large', 5: 'huge'},
+                selected: 2
+                //callback:
+            },*/
+        },
+        events: {
+            show: function(opt) {
+                // this is the trigger element
+                var $this = this;
+                // import states from data store
+                $.contextMenu.setInputValues(opt, $this.data());
+                // this basically fills the input commands from an object
+                // like {name: "foo", yesno: true, radio: "3", &hellip;}
+            },
+            hide: function(opt) {
+                // this is the trigger element
+                var $this = this;
+                // export states to data store
+                $.contextMenu.getInputValues(opt, $this.data());
+                // this basically dumps the input commands' values to an object
+                // like {name: "foo", yesno: true, radio: "3", &hellip;}
+            }
+        }
+    });
+    });
+}
 
-function initial_setup() {
-    basegraph = makebg();
-    coloringgraph = makecg();
-    metacoloringgraph = makemcg();
-    partialcoloringgraph = makepcg();
-    
-    $optionsgrid = $('.pgrid').packery({
-      // options
-      itemSelector: '.pgrid-item',
-      gutter: 8,
-      percentPosition: true,
-      resize: true,  
-    });
-    
-    // $('.ggrid').height($(window).height());
-    $grid = $('.ggrid').packery({
-      // options
-      itemSelector: '.ggrid-item',
-      percentPosition: true,
-    });
-    
-    
-    gdraggies = [];
-    $grid.find('.ggrid-item').each( function( i, gridItem ) {
-        var draggie = new Draggabilly( gridItem );
-        // bind drag events to Packery
-        $grid.packery( 'bindDraggabillyEvents', draggie );
-        gdraggies.push(draggie);
-    });
-    isDrag = true;
-    toggle_drag();
-    
-    var $griditems = $( $grid.packery('getItemElements') );
-    console.log($griditems);
-    
-    /*$griditems.resizable({
-			    grid: 10,
-			    handles: { 
-			        'nw': '#nwgrip', 
-			        'ne': '#negrip', 
-			        'sw': '#swgrip', 
-			        'se': '#segrip', 
-			        'n': '#ngrip', 
-			        'e': '#egrip', 
-			        's': '#sgrip', 
-			        'w': '#wgrip' 
-			    },
-			    start: function(event,ui){
-			    	if($(event.target).hasClass('item')){
-		    			$(event.target).css('z-index', 1000);
-		    		}
-			    },
-			    resize: function(event,ui){
-              		$grid.packery( 'fit', event.target, ui.position.left, ui.position.top );
-			    },
-			    cancel: '.stamp',
-			    stop: function(event,ui){
-              		$(event.target).css('z-index','auto');
-              		$grid.packery();
-			    },   
-			    refreshPositions: true
-			  });*/
-    
-    $grid.on( 'dblclick', '.ggrid-item', function( event ) {
-        var $item = $( event.currentTarget );
+function cycle_sizes(griditem) {
+    var $item = griditem;
         // change size of item by toggling large class
         if ( $item.is('.ggrid-item--large') ) {
             $item.toggleClass('ggrid-item--large');
@@ -445,33 +455,78 @@ function initial_setup() {
         } else {
             $item.toggleClass('ggrid-item--medium');
         }
-        
-        
+
         if ( $item.is('.ggrid-item--large') || $item.is('.ggrid-item--medium') ) {
             // fit large item
             $grid.packery( 'fit', event.currentTarget );
+            $grid.packery('layout');
         } else {
             // back to small, shiftLayout back
             $grid.packery('shiftLayout');
         }
         $grid.packery('layout');
-    });
 }
 
 function toggle_drag() {
     var method = isDrag ? 'disable' : 'enable';
     isDrag = !isDrag;
-    
+
     gdraggies.forEach( function( draggie ) {
         draggie[ method ]();
     });
-    var value = $('#toggle-drag-button').html();  
+    var value = $('#toggle-drag-button').html();
     if (value.includes('ON')) {
-       $('#toggle-drag-button').html('Drag: OFF'); 
+       $('#toggle-drag-button').html('Drag: OFF');
     } else {
-       $('#toggle-drag-button').html('Drag: ON'); 
+       $('#toggle-drag-button').html('Drag: ON');
     }
     $optionsgrid.packery('layout');
+}
+
+
+function initial_setup() {
+    bg = makebg();
+    cg = makecg();
+    mcg = makemcg();
+    pcg = makepcg();
+
+    $optionsgrid = $('.pgrid').packery({
+      // options
+      itemSelector: '.pgrid-item',
+      gutter: 8,
+      percentPosition: true,
+      resize: true,
+    });
+
+    // $('.ggrid').height($(window).height());
+    $grid = $('.ggrid').packery({
+      // options
+      itemSelector: '.ggrid-item',
+      percentPosition: true,
+      stagger: 30,
+      gutter: 10,
+    });
+
+
+    gdraggies = [];
+    $grid.find('.ggrid-item').each( function( i, gridItem ) {
+        var draggie = new Draggabilly( gridItem );
+        // bind drag events to Packery
+        $grid.packery( 'bindDraggabillyEvents', draggie );
+        gdraggies.push(draggie);
+    });
+    isDrag = true;
+    toggle_drag();
+
+    var $griditems = $( $grid.packery('getItemElements') );
+    console.log($griditems);
+
+    $grid.on( 'dblclick', '.ggrid-item', function( event ) {
+        var $item = $( event.currentTarget );
+        cycle_sizes($item);
+    });
+
+    //add_ctxt_menu();
 }
 
 

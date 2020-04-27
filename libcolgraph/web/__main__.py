@@ -153,7 +153,7 @@ def generate():
     '''
     requestdata = request.get_json()
     # print(requestdata)
-    print('handling POST on generate!')
+    print('handling POST on generate!', requestdata)
 
     global data
 
@@ -247,7 +247,7 @@ def get_stats():
 
     retdict = {
         'stats': ' '.join(['{}: {},'.format(k, v)
-                             for k, v in app.statsdict.items()]),
+                           for k, v in app.statsdict.items()]),
               }
 
     response = app.response_class(status=200, response=json.dumps(retdict),
@@ -378,6 +378,39 @@ def to_matrix_str(g):
 
 @app.route('/save', methods=['POST'])
 def save_graph():
+    '''
+    '''
+    requestdata = request.get_json()
+    # print(requestdata)
+    print('handling POST on save!')
+
+    global data
+    # graphdata = requestdata[0]
+    # app.bg = bg = lcg.viz.from_visjs(graphdata)
+
+    w = sg.Window('Save graph').Layout([[sg.Text('Filename')], [sg.Input(), sg.FileSaveAs()], [sg.OK(), sg.Cancel()] ])
+    event, values = w.Read()
+    w.Close()
+
+    if event == 'OK':
+        dest = Path(values[0])
+        bgmat = to_matrix_str(app.bg)
+
+        with dest.open('w') as f:
+            f.write(bgmat)
+            if len(app.mcg) <= 128:
+                mcgmat = to_matrix_str(app.mcg)
+                f.write(mcgmat)
+
+        response = app.response_class(status=200, mimetype='application/json',
+                                      response=json.dumps({'status': 'OK'}))
+
+        return response
+    return None
+    
+
+@app.route('/savesvg', methods=['POST'])
+def save_graph_as_svg():
     '''
     '''
     requestdata = request.get_json()

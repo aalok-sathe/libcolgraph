@@ -1,8 +1,10 @@
-{% block content %}    
+{% block content %}
    <div id="optionsbar" class="pgrid">
-   
+
     <div class="pgrid-item">
-      <button id="generate-button" onclick="generate()">Generate</button>
+        <i class="fa fa-cog"></i>
+      <button id="generate-button" onclick="generate()">
+        Generate</button>
     </div>
     <div class="pgrid-item">
       k =
@@ -10,60 +12,72 @@
       <!--input id="numcolors-textfield" type="text" name="k" value="{{ colors }}"-->
     </div>
     <div class="pgrid-item">
-      <button id="save-button" onclick="save()">Save</button>
+      <i class="fa fa-floppy-o"></i>
+      <button id="save-button" onclick="save()">
+      Save</button>
     </div>
     <div class="pgrid-item">
-      <button id="load-button" onclick="load_file()">Load</button>
+        <i class="fa fa-upload"></i>
+      <button id="load-button" onclick="load_file()">
+      Load</button>
     </div>
-   
+
     <div class="pgrid-item">
+        <i class="fa fa-random"></i>
       <button id="random-button" onclick="randomgraph()">Random</button>
     </div>
-    
+
     <div class="pgrid-item">
+          <i class="fa fa-refresh"></i>
       <button id="refresh-button" onclick="refresh_page()">
-          Refresh cache (if lagging)
+          Refresh (if lagging)
       </button>
     </div>
     <div class="pgrid-item">
+        <i class="fa fa-spinner"></i>
       <button id="force-cg-button" onclick="get_cg_data()">
           ColoringGraph hidden. Force display?
       </button>
     </div>
     <div class="pgrid-item">
+        <i class="fa fa-sliders"></i>
       <button id="toggle-physics-button" onclick="toggle_physics()">
           Physics: ON
       </button>
     </div>
-    
+
     <div class="pgrid-item">
+        <i class="fa fa-arrows"></i>
       <button id="toggle-drag-button" onclick="toggle_drag()">
           Drag: ON
       </button>
     </div>
-      
+
     <div class="pgrid-item">
+        <i class="fa fa-th-large"></i>
       <button id="reset-layout-button" onclick="$grid.packery('layout');">
-          Reset layout
+          Auto layout
       </button>
     </div>
-      
-    <div class="pgrid-item">
-      <button id="help-button" onclick="window.open('https://aalok-sathe.gitlab.io/libcolgraph/libcolgraph/web', '_blank')">
-          Help
+
+    <div class="pgrid-item help">
+      <i class="fa fa-question-circle"></i>
+      <button id="help-button" class="help" onclick="window.open('https://aalok-sathe.gitlab.io/libcolgraph/libcolgraph/web', '_blank')">
+          Help/Tutorial
       </button>
     </div>
 
      <div class="pgrid-item pgrid-item--wide">
         <p style="display:inline">  </p>
-        <p style="display:inline" id="topstatsdisplay">STATS: {{ stats }}</p>
+        <p style="display:inline; background-color: #fffa84; color: black" id="topstatsdisplay">
+            <i class="fa fa-bar-chart"></i>
+            STATS: {{ stats }}</p>
      </div>
-   
-   </div>
-   
-   
-   <div class="ggrid">
 
+   </div>
+
+
+   <div class="ggrid">
 
         {% with container_type="bg" %}
             {% include "graphcontainer.html"  %}

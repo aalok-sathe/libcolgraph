@@ -8,43 +8,48 @@
     <meta name="author" content="(C) 2019-20 Coloring Graphs lab">
     <title>libcolgraph web</title>
     <link rel="shortcut icon" href="{{ url_for('static', filename='favicon.ico') }}">
-    
+
     {% for filename in ['vis-network.min.js', 'jquery.min.js'] %}
-        <script 
+        <script
             type="text/javascript" src={{ url_for('static', filename='src/'+filename) }}></script>
     {% endfor %}
     {% for filename in ['vis.css'] %}
         <link rel="stylesheet" type="text/css" href={{ url_for('static', filename='src/'+filename) }}/>
     {% endfor %}
-    
+
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/vis/4.16.1/vis.css" type="text/css"/>
     <link rel="stylesheet" href={{ url_for('static', filename='grid.css') }}>
-    
-    <script 
+
+    <script
         src="https://unpkg.com/packery@2/dist/packery.pkgd.min.js"></script>
-    <script 
+    <script
         src="https://unpkg.com/draggabilly@2/dist/draggabilly.pkgd.min.js"></script>
     <script
         src="https://code.jquery.com/ui/1.12.0/jquery-ui.min.js"
         integrity="sha256-eGE6blurk5sHj+rmkfsGYeKyZx3M4bG+ZlFyA7Kns7E="
         crossorigin="anonymous"></script>
-    
-    
+
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jquery-contextmenu/2.7.1/jquery.contextMenu.min.css">
+    <link href="//maxcdn.bootstrapcdn.com/font-awesome/4.6.3/css/font-awesome.min.css" rel="stylesheet"/>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-contextmenu/2.7.1/jquery.contextMenu.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-contextmenu/2.7.1/jquery.ui.position.js"></script>
+
+
   </head>
-  
+
   <script>
     window.onload = ( function() { //window Ready
         console.log("Window ready");
         initial_setup();
     });
     </script>
-  
-  
+
+
 
   <body style="width: 100%; height: 100%;">
     {% include "grid.html" %}
   </body>
- 
+
   <script src={{ url_for('static', filename='colgraphweb.js') }}></script>
-  
+
 </html>

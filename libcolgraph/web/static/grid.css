@@ -1,6 +1,7 @@
 body {
-  margin: 1px;
+  margin: 3px;
   overflow: scroll;
+  background-color: #fffdd0;
 }
 
 * {
@@ -9,13 +10,51 @@ body {
           box-sizing: border-box;
 }
 
+
+/* general ui */
+
+.card {
+  /* background: #fff; */
+  border-radius: 4px;
+  /* display: inline-block;*/
+  margin: .5rem;
+  /* position: relative;*/
+  box-shadow: 0 12px 20px rgba(0,0,0,0.12), 0 10px 10px rgba(0,0,0,0.24);
+  /*transition: all 0.3s cubic-bezier(.25,.8,.25,1);*/
+}
+
+.card:hover {
+  box-shadow: 0 28px 40px rgba(0,0,0,0.25), 0 16px 16px rgba(0,0,0,0.22);
+}
+
+.card--tiny {/*, .pgrid-item:not(.pgrid-item--wide) {*/
+  /* background: #fff; */
+  border-radius: 1px;
+  /* display: inline-block;*/
+  margin: .1rem;
+  /* position: relative;*/
+  box-shadow: 0 2px 4px rgba(0,0,0,0.12), 0 3px 3px rgba(0,0,0,0.24);
+  /*transition: all 0.3s cubic-bezier(.25,.8,.25,1);*/
+}
+
+.card--tiny:hover {
+  /*box-shadow: 0 13px 18px rgba(0,0,0,0.25), 0 10px 10px rgba(0,0,0,0.22);*/
+}
+
+
+/* packery */
+
 .pgrid-item {
 }
 
-.pgrid-item > button { 
-    background-color: #000066;
+.pgrid-item > button.help {
+    background-color: orange;
+}
+
+.pgrid-item > button:not(.help) {
+    background-color: #d0d2ff;
     border: 1px solid black;
-    color: white;
+    color: black;
     cursor: pointer;
 }
 
@@ -45,11 +84,11 @@ body {
 }
 
 .ggrid-item {
-    float: left;
+    /*float: left;*/
     width: 20%;
     height: 200px;
-    border: 4px solid black;
-    border-color: gray;
+    /*border: 1px solid black;
+    border-color: #d0d2ff;*/
     background-color: black;
 }
 .ggrid-item:hover{
@@ -57,28 +96,24 @@ body {
 }
 
 .ggrid-item--medium {
-    float: left;
+    /*float: left;*/
     width: 30%;
     height: 350px;
-    border: 4px solid black;
-    border-color: gray;
-    background-color: black;
+    /*border: 2px solid #d0d2ff; */
 }
 
 .ggrid-item--large {
-    float: left;
+    /*float: left;*/
     width: 45%;
-    height: 600px;
-    border: 4px solid black;
-    border-color: gray;
-    background-color: black;
+    height: 500px;
+    /*border: 4px solid #d0d2ff;*/
 }
 
-.ggrid-item > container { 
+.ggrid-item > container {
     background-color: black;
     cursor: pointer;
 }
-.ggrid-item > div > p { 
+.ggrid-item > div > p {
     background-color: white;
     color: white;
     height: 5%;
@@ -93,7 +128,7 @@ body {
 
 .ggrid-item.is-dragging,
 .ggrid-item.is-positioning-post-drag {
-  background: white;
+  background: #d0fffd;
   z-index: 2; /* keep dragged item on top */
 }
 .packery-drop-placeholder {
@@ -102,3 +137,8 @@ body {
   -webkit-transition: -webkit-transform 0.2s;
           transition: transform 0.2s;
 }
+
+
+/* context menu */
+
+
