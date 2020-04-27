@@ -36,7 +36,7 @@ for questions, reach out.
 
   <!--img src="https://i.imgur.com/TusisoA.png" /-->
   
-  <img src="https://i.imgur.com/oRV4If1.png" />
+  <img src="https://i.imgur.com/ywGUu6J.png" />
 
   for a static demo, go to the project's [gitlab pages](https://aalok-sathe.gitlab.io/libcolgraph). 
 
