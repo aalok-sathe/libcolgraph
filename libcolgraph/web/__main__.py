@@ -153,7 +153,7 @@ def generate():
     '''
     requestdata = request.get_json()
     # print(requestdata)
-    print('handling POST on generate!', requestdata)
+    print('handling POST on generate!')
 
     global data
 
