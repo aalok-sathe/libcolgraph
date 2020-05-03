@@ -5,8 +5,13 @@
 ## install manually from source
 
 1. clone the repository
-  - `git clone https://github.com/aalok-sathe/libcolgraph`
+
+    `git clone https://github.com/aalok-sathe/libcolgraph`
+
 1. enter the repository
-  - `cd libcolgraph`
+
+    `cd libcolgraph`
+
 1. make
-  - `make install` to install system-wide for your user
+
+    `make install` to install system-wide for your user
