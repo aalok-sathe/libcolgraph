@@ -161,6 +161,9 @@ class BaseVertex : public Vertex
         void reset_neighbor_track();
         bool has_next_neighbor();
 
+        // return the degree of vertex
+        int degree() { return neighbors.size(); }
+
         // returns a pointer to a BaseVertexNeighborIterator object to
         // support iteration over its neighbors
         BaseVertexNeighborIterator* __iter__();

@@ -140,22 +140,88 @@ load_txt(char* path)
 }
 
 
-// DEPRECATED!
-//
-// ColoringGraph*
-// BaseGraph::
-// build_coloring_graph(int k)
-// {
-//     // TODO: make recursive backtracking based search
-//     ColoringGraph* cg = new ColoringGraph(k, this);
-//     for (long coloring=0; coloring<pow(k, size()); coloring++)
-//         if (is_valid_coloring(coloring, k))
-//             cg->add_vertex(coloring);
-//         else
-//             continue;
+BaseGraph*
+BaseGraph::
+build_edge_graph()
+{
+    bool verbose = false;
+    char* verbosityptr = std::getenv("VERBOSE");
+    if (verbosityptr != NULL)
+        if (std::string(verbosityptr) == "1")
+            verbose = true;
 
-//     return cg;
-// }
+    BaseGraph* eg = new BaseGraph();
+    std::unordered_map<int, int> edge2i;
+    for (auto& entry1 : vertices)
+    {
+        // all the edges associated with this vertex
+        std::vector<int> edgegroup(0, 0);
+
+        long v1 = entry1.first;
+        for (const long v2 : entry1.second->neighbors)
+        {
+            if (v1 == v2) 
+                continue;
+
+            int a, b, name;
+            a = (v1 < v2)? v1 : v2;
+            b = (v1 > v2)? v1 : v2;
+            name = size()*a + b;
+
+            // add only if it's a new edge
+            if (edge2i.find(name) == edge2i.end())
+            {
+                edge2i.insert(std::pair<int, int>(name, eg->size()));
+                eg->add_vertex(eg->size());
+            }
+            edgegroup.push_back(name);
+        }
+
+        for (int& a : edgegroup)
+        {
+            if (verbose)
+            {
+                std::cerr << "encountered edge " << a << " of ";
+                for (int& listing : edgegroup)
+                    std::cerr << listing << " ";
+                std::cerr << std::endl;
+            }
+
+            for (int& b : edgegroup)
+            {
+                if (a == b)
+                    continue;
+
+                if (verbose)
+                std::cerr << "making edge " << a << " " << b << std::endl;
+
+                eg->make_edge(edge2i.find(a)->second, edge2i.find(b)->second);
+            }
+        }
+
+        edgegroup.clear();
+    }
+    return eg;
+}
+
+
+
+ColoringGraph*
+BaseGraph::
+build_edge_coloring_graph(int k)
+{
+    bool verbose = false;
+    char* verbosityptr = std::getenv("VERBOSE");
+    if (verbosityptr != NULL)
+        if (std::string(verbosityptr) == "1")
+            verbose = true;
+
+    if (verbose)
+    std::cerr << "generating edgeColoringGraph with k=" << k << std::endl;
+
+    return build_edge_graph()->build_coloring_graph(k);
+}
+
 
 
 ColoringGraph*
@@ -181,6 +247,17 @@ build_coloring_graph(int k)
 }
 
 
+/**
+ *
+ * Parameters
+ * ---
+ *  current: int
+ *      current vertex index to consider
+ *  cg: ColoringGraph*
+ *      ptr to the coloring graph that's being constructed
+ *  colorng: vector<int>
+ *      an array of color assignments to vertices
+ */
 void
 BaseGraph::
 find_all_colorings(int current, int k, ColoringGraph* cg,
@@ -216,9 +293,9 @@ load_next_coloring(int current, int k, std::vector<int>& coloring)
         int i = 0;
         while(i<size())
         {
-            if (vertices.find(current)->second->neighbors.find(i)
-                != vertices.find(current)->second->neighbors.end()
-                && coloring.at(current) == coloring.at(i))
+            BaseVertex* curvtx = vertices.find(current)->second;
+            if (curvtx->neighbors.find(i) != curvtx->neighbors.end() // is nbr
+                && coloring.at(current) == coloring.at(i)) // same color
                 {
                     break;
                     // std::cout << "conflict for current=" << current
@@ -790,9 +867,9 @@ tarjans()
 {
     bool verbose = false;
     char* verbosityptr = std::getenv("VERBOSE");
-    if (verbosityptr != NULL)
-        if (std::string(verbosityptr) == "1")
-            verbose = true;
+    if (verbosityptr != NULL and std::string(verbosityptr) == "1")
+        verbose = true;
+
 
     //*****************************
     // Declare helper variables and structures
