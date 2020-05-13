@@ -8,7 +8,7 @@
 ########################
 
 MODULE      =   libcolgraph
-CSOURCES    =   $(wildcard $(MODULE)/*.h)
+CSOURCES    =   $(wildcard $(MODULE)/*.h) $(MODULE)/Graph.cpp $(MODULE)/Vertex.cpp
 ISOURCES    =   $(wildcard $(MODULE)/*.i) $(wildcard $(MODULE)/swigsrc/*.i)
 SOURCES     =   Makefile setup.py
 TARGET      =   $(MODULE)/$(MODULE).py # $(MODULE)/$(MODULE)_wrap.cpp
