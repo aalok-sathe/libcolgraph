@@ -28,6 +28,10 @@ echo 'export PATH="$PATH:$HOME/.swig/bin"' >> ~/.bashrc
 source ~/.bash_profile
 source ~/.bashrc
 
+mkdir -p "$HOME/.local"
+mkdir -p "$HOME/.local/bin"
+ln -s "$HOME/.swig/bin/swig" "$HOME/.local/bin" -f
+
 cd ..
 echo "INFO finished installing swig: $(which swig)"
 
