@@ -34,7 +34,9 @@ for questions, reach out.
   components. The central 'mothership' can be seen, adjacent to which there are cut
   vertices, and finally the stray singular coloring vertices at the tips of polyps.
 
-  <img src="https://i.imgur.com/TusisoA.png" />
+  <!--img src="https://i.imgur.com/TusisoA.png" /-->
+  
+  <img src="https://i.imgur.com/ywGUu6J.png" />
 
   for a static demo, go to the project's [gitlab pages](https://aalok-sathe.gitlab.io/libcolgraph). 
 

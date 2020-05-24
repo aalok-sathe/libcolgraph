@@ -8,7 +8,7 @@
 ########################
 
 MODULE      =   libcolgraph
-CSOURCES    =   $(wildcard $(MODULE)/*.h)
+CSOURCES    =   $(wildcard $(MODULE)/*.h) $(MODULE)/Graph.cpp $(MODULE)/Vertex.cpp
 ISOURCES    =   $(wildcard $(MODULE)/*.i) $(wildcard $(MODULE)/swigsrc/*.i)
 SOURCES     =   Makefile setup.py
 TARGET      =   $(MODULE)/$(MODULE).py # $(MODULE)/$(MODULE)_wrap.cpp
@@ -38,8 +38,9 @@ $(TARGET): $(CSOURCES) $(ISOURCES) $(MODULE)/swigsrc/docs.i
 #	echo "need to refresh after changed $(ISOURCES)"
 #	#$(MAKE) clean
 
-@swig: 
+swig: 
 	./utils/getswig.sh
+	export PATH="$(PATH):$(HOME)/.swig/bin"
 
 exist:
 	if  [ ! -f $(TARGET) ]; then \
@@ -55,7 +56,7 @@ exist:
 ####    packaging   ####
 ########################
 
-package: $(TARGET)
+package: swig $(TARGET)
 	python3 setup.py sdist bdist_wheel
 
 trigger:
@@ -67,9 +68,12 @@ docs: Doxyfile $(MODULE)/swigsrc/docs.i $(wildcard $(MODULE)/**/%.py) $(TARGET) 
 	mkdir -p public/
 	cp -r docs/libcolgraph public/
 
-$(MODULE)/swigsrc/docs.i: $(CSOURCES)
+$(MODULE)/swigsrc/docs.i: $(CSOURCES) doxy2swig.py
 	doxygen Doxyfile
-	doxy2swig docs/xml/index.xml libcolgraph/swigsrc/docs.i -catfo
+	python3 doxy2swig.py docs/xml/index.xml libcolgraph/swigsrc/docs.i -catfo
+
+doxy2swig.py:
+	wget https://raw.githubusercontent.com/m7thon/doxy2swig/master/doxy2swig.py
 
 ####################
 ####    cleanup ####

@@ -67,6 +67,8 @@ class MetaGraphVertexIterator : public GraphVertexIterator<MetaVertex>
 };
 
 
+
+
 // class BaseGraph subclassed from a particular template instance of Graph,
 // that for BaseVertex objects
 class BaseGraph : public Graph<BaseVertex>
@@ -78,13 +80,6 @@ class BaseGraph : public Graph<BaseVertex>
         // method that takes a path to a file containing an adjacency matrix
         // description of a graph
         void load_txt(char* path);
-
-        // TODO method that creates a random graph at the current BaseGraph
-        // instance using the Erdos-Reyni random graph model
-        // int v: how many vertices the graph should have
-        // double p: what probability to use while generating edges between
-        // pairs of vertices
-        // void generate_random(int v, double p);
 
         /**
          * resets the graph by clearing its hashed collection of vertices
@@ -106,14 +101,15 @@ class BaseGraph : public Graph<BaseVertex>
         // encoding
         int get_vertex_color(long coloring, long name, int k);
 
+        BaseGraph* build_edge_graph();
         // builds a coloring graph with k colors for this graph
         ColoringGraph* build_coloring_graph(int k);
+        ColoringGraph* build_edge_coloring_graph(int k);
 
         // recursive method with backtracking that takes a particular coloring
         // sequence and explores possible colorings in a DFS manner
         void find_all_colorings(int current, int k, ColoringGraph* cg,
                                 std::vector<int> coloring);
-
         // given a coloring sequence by reference, produces the next coloring
         // sequence in-place in the sequential order of the coloring DFS
         void load_next_coloring(int current, int k, std::vector<int>& coloring);
