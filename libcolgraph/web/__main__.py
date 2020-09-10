@@ -247,7 +247,7 @@ def get_stats():
 
     retdict = {
         'stats': ' '.join(['{}: {},'.format(k, v)
-                             for k, v in app.statsdict.items()]),
+                           for k, v in app.statsdict.items()]),
               }
 
     response = app.response_class(status=200, response=json.dumps(retdict),
@@ -407,6 +407,39 @@ def save_graph():
 
         return response
     return None
+    
+
+@app.route('/savesvg', methods=['POST'])
+def save_graph_as_svg():
+    '''
+    '''
+    requestdata = request.get_json()
+    # print(requestdata)
+    print('handling POST on save!')
+
+    global data
+    # graphdata = requestdata[0]
+    # app.bg = bg = lcg.viz.from_visjs(graphdata)
+
+    w = sg.Window('Save graph').Layout([[sg.Text('Filename')], [sg.Input(), sg.FileSaveAs()], [sg.OK(), sg.Cancel()] ])
+    event, values = w.Read()
+    w.Close()
+
+    if event == 'OK':
+        dest = Path(values[0])
+        bgmat = to_matrix_str(app.bg)
+
+        with dest.open('w') as f:
+            f.write(bgmat)
+            if len(app.mcg) <= 128:
+                mcgmat = to_matrix_str(app.mcg)
+                f.write(mcgmat)
+
+        response = app.response_class(status=200, mimetype='application/json',
+                                      response=json.dumps({'status': 'OK'}))
+
+        return response
+    return None
 
 
 @app.route('/load', methods=['POST'])
@@ -483,11 +516,15 @@ def runflaskgui(url='http://localhost', port='5000', env='development',
     app.config['TESTING'] = testing
 
     bg = lcg.BaseGraph()
+    app.cg = cg = bg.build_coloring_graph(0)
+    app.mcg = mcg = cg.tarjans()
+    app.cut_verts = cut_verts = [*mcg.get_cut_vertices()]
+    app.pcg = pcg = mcg.rebuild_partial_graph()
+    app.mother_verts = mother_verts = [*mcg.get_mothership_cut_vertices()]
+    
     if args.input_file:
         bg.load_txt(args.input_file)
     app.bg = bg
-
-    update_bg_data(bg)
 
     if args.render_on_launch:
         app.cg = cg = bg.build_coloring_graph(args.colors)
@@ -496,18 +533,20 @@ def runflaskgui(url='http://localhost', port='5000', env='development',
         app.pcg = pcg = mcg.rebuild_partial_graph()
         app.mother_verts = mother_verts = [*mcg.get_mothership_cut_vertices()]
 
-        update_mcg_data(mcg)
-        update_cg_data(cg)
-        update_pcg_data(pcg)
+    update_bg_data(bg)
+    update_mcg_data(mcg)
+    update_cg_data(cg)
+    update_pcg_data(pcg)
 
-        app.statsdict = statsdict = dict(
-            cgsize=len(cg),
-            is_connected=cg.is_connected(),
-            is_biconnected=cg.is_biconnected(),
-        )
-        data.update({'stats': ' '.join(['{}: {},'.format(k, v)
-                                for k, v in app.statsdict.items()])})
+    app.statsdict = statsdict = dict(
+        cgsize=len(cg),
+        is_connected=cg.is_connected(),
+        is_biconnected=cg.is_biconnected(),
+    )
+    data.update({'stats': ' '.join(['{}: {},'.format(k, v)
+                 for k, v in app.statsdict.items()])})
 
+    
     app.run(port=port, threaded=args.threaded)
 
 
